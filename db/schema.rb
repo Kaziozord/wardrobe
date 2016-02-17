@@ -11,7 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160104225820) do
+ActiveRecord::Schema.define(version: 20160105022544) do
+
+  create_table "item_sets", force: :cascade do |t|
+    t.integer "item_id"
+    t.string  "name"
+    t.string  "description"
+  end
+
+  add_index "item_sets", ["item_id"], name: "index_item_sets_on_item_id"
+
+  create_table "item_sets_items", id: false, force: :cascade do |t|
+    t.integer "item_id"
+    t.integer "item_set_id"
+  end
+
+  add_index "item_sets_items", ["item_id"], name: "index_item_sets_items_on_item_id"
+  add_index "item_sets_items", ["item_set_id"], name: "index_item_sets_items_on_item_set_id"
 
   create_table "items", force: :cascade do |t|
     t.string   "name"
