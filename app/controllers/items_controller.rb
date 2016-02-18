@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
 
   def index
-    render locals: { items: items, properties: properties }
+    render locals: { items: all_items, properties: properties }
   end
 
   def add_item
@@ -10,6 +10,8 @@ class ItemsController < ApplicationController
   end
 
   def list_filtered_items
+    filtered_items = FilterItems.call(all_items, given_states, filter_type)
+    
     respond_to do |format|
       format.js { 
         render partial: "list", locals: { items: filtered_items, properties: properties }
@@ -18,25 +20,6 @@ class ItemsController < ApplicationController
   end
 
   private
-
-  def filtered_items
-    return items if given_states.blank?
-
-    Item.all.map do |item|
-      case filter_type
-      when :strict
-        given_states.map do |state|
-          item.states.map {|s| s.name}.include?(state)
-        end.include?(false) ? nil : item
-      when :any
-        item.states.find do |state|
-          given_states.include?(state.name)
-        end ? item : nil
-      else
-        item
-      end
-    end.compact.map{|i| ItemPresenter.call(i)}
-  end
 
   def given_states
     params[:filter]
@@ -47,11 +30,11 @@ class ItemsController < ApplicationController
   end
 
   def properties
-    Property.all.map{|p| PropertyPresenter.call(p)}
+    Property.fetch_all.map{|p| PropertyPresenter.call(p)}
   end
 
-  def items
-    Item.all.map{|i| ItemPresenter.call(i)}
+  def all_items
+    Item.fetch_all.map{|i| ItemPresenter.call(i)}
   end
 
   def item_name
