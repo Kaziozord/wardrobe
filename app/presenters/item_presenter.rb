@@ -1,6 +1,4 @@
 class ItemPresenter
-  def initialize
-  end
 
   def self.call(item)
     produce_output(
@@ -11,26 +9,17 @@ class ItemPresenter
   private
 
   def self.get_properties_values(item)
-    values = Hash.new
-    item.properties.each do |property|
-      next if property.states.count > 0
-      values.store(
-        property.name.parameterize.underscore.to_sym,
-        item.get_value(property)
-      )
-    end
-    values
+    Hash[
+      item.properties.map do |property|
+        [ format_name(property.name), item.get_value(property) ] if property.states.count == 0
+      end.compact
+    ]
   end
 
   def self.get_states(item)
-    states = Hash.new
-    item.states.each do |state|
-      states.store(
-        state.property.name.parameterize.underscore.to_sym,
-        state.name
-      )
-    end
-    states
+    Hash[
+      item.states.map {|state| [ format_name(state.property.name), state.name ]}
+    ]
   end
 
   def self.get_sets(item)
@@ -38,12 +27,15 @@ class ItemPresenter
   end
 
   def self.produce_output(item, states, sets, values)
-    output = Hash.new
-    output.store(:name, item.name)
-    output.store(:description, item.description)
-    output.store(:items_sets, sets)
-    output.store(:properties, states.merge(values))
+    {
+      name: item.name,
+      description: item.description,
+      items_sets: sets,
+      properties: states.merge(values)
+    }
+  end
 
-    output
+  def self.format_name(name)
+    name.parameterize.underscore.to_sym
   end
 end
