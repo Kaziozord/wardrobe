@@ -1,0 +1,25 @@
+.container-fluid.items-list
+  - if items.blank?
+    .alert.alert-info
+      %strong INFO:
+      no items found, please try with another filter set
+  - items.each do |item|
+    .col-sm-4
+      .panel.panel-default.panel-item
+        .panel-heading
+          .h4
+            = "#{item[:name]}"
+        .panel-body
+          .small
+            = "#{item[:description]}"
+          %hr
+          .col-sm-6
+            %button.btn.btn-xs
+              matches
+            %button.btn.btn-xs
+              laundry
+          .col-sm-6
+            .small   
+              - item[:properties].each do |key, value|
+                %li
+                  = "#{key.to_s.humanize.downcase}: #{value}"

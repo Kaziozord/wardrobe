@@ -1,0 +1,34 @@
+#newItem.modal.fade{role: "dialog"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", type: "button"} ×
+        %h4.modal-title Add New Item
+      .modal-body
+        %form.modal-form{method: "post"}
+          .form-group.row
+            %label.col-sm-2.form-control-label{:for => "inputName"} Name
+            .col-sm-10
+              %input#inputName.form-control{:placeholder => "Enter name of your new item", :type => "text"}/
+          .form-group.row
+            %label.col-sm-2.form-control-label{:for => "inputDescription"} Description
+            .col-sm-10
+              %input#inputDescription.form-control{:placeholder => "Describe what is it", :type => "text"}/
+          .form-group.row
+            - properties.each do |property|
+              %label.col-sm-2=property[:name]
+              .col-sm-10
+                .dropdown
+                  %button.btn.btn-default.dropdown-toggle.dropdown-select-state{'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown', type: 'button'}
+                    select one
+                    %span.caret
+                  %ul.dropdown-menu.dropdown-new-item{:id => "#property-#{property[:name].tr(' ', '-')}", 'aria-labelledby' => "dropdown-#{property[:name].to_s.tr(' ', '_')}"}
+                    - property[:states].each do |state|
+                      %li
+                        %a{href: "#", class: 'dropdown-new-item', data: {value: state.to_s.humanize.downcase}} #{state.to_s.humanize.downcase}
+          .form-group.row
+            .col-sm-offset-2.col-sm-10
+              %button.btn.btn-success#submit-new-item{type: "submit"} Add Item
+              %button.btn.btn-danger#reset-new-item{:type => "reset"} Reset
+        .modal-footer
+          %button.btn.btn-default#close-modal-new-item{"data-dismiss" => "modal", type: "button"} Close

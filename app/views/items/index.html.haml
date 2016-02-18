@@ -1,0 +1,20 @@
+.container-fluid
+  .row
+    .panel.panel-default
+      .panel-body{id: 'filter-buttons-group'}
+        .btn-group{'aria-label' => '...', role: 'group'}
+          %button.btn.btn-default.filter-link{type: 'button', 'data-filtertype' => 'all'} all
+          %button.btn.btn-info.filter-link{type: 'button', 'data-filtertype' => 'any'} any
+          %button.btn.btn-info.filter-link{type: 'button', 'data-filtertype' => 'strict'} strict
+          - properties.each do |property|
+            .btn-group{:role => 'group'}
+              %button.btn.btn-default.dropdown-toggle{'aria-expanded' => 'false', 'aria-haspopup' => 'true', 'data-toggle' => 'dropdown', type: 'button'}
+                =property[:name]
+                %span.caret
+              %ul.dropdown-menu{'aria-labelledby' => "dropdown-#{property[:name].to_s.tr(' ', '_')}", class: 'dropdown-filter'}
+                - property[:states].each do |state|             
+                  %li
+                    %a{href: "#", class: 'menu-filter'} #{state.to_s.humanize.downcase}
+
+= render partial: "list", locals: { items: items }
+= render partial: "new", locals: { properties: properties }
