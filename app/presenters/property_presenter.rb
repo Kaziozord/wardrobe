@@ -1,17 +1,12 @@
 class PropertyPresenter
 
   def self.call(property)
-    output = Hash.new
-    states = Array.new
+    states = property.states.map{ |state| state.name.parameterize.underscore.to_sym }
 
-    if property.states != nil
-      property.states.each {|s| states << s.name.parameterize.underscore.to_sym}
-    end
-
-    output.store(:name, property.name)
-    output.store(:description, property.description)
-    output.store(:states, states)
-
-    output
+    {
+      name: property.name,
+      description: property.description,
+      states: states
+    }
   end
 end
