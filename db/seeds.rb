@@ -59,4 +59,4 @@ ItemSet.find(1).items << Item.find(2)
 ItemSet.find(2).items << Item.find(2)
 ItemSet.find(2).items << Item.find(3)
 
-ap Item.fetch_all.map{|i| ItemPresenter.call(i)}
+ap Item.map_all{|i| ItemPresenter.call(i)}

@@ -3,7 +3,7 @@ class FilterItems
   def self.call(all_items, given_states, filter_type)
     return all_items if given_states.blank?
 
-    Item.fetch_all.map do |item|
+    Item.map_all do |item|
       case filter_type
       when :strict
         given_states.map do |state|

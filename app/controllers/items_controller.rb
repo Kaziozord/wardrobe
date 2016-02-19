@@ -30,11 +30,11 @@ class ItemsController < ApplicationController
   end
 
   def properties
-    Property.fetch_all.map{|p| PropertyPresenter.call(p)}
+    Property.map_all{|p| PropertyPresenter.call(p)}
   end
 
   def all_items
-    Item.fetch_all.map{|i| ItemPresenter.call(i)}
+    Item.map_all{|i| ItemPresenter.call(i)}
   end
 
   def item_name
