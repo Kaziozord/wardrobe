@@ -4,10 +4,7 @@ class Property < ActiveRecord::Base
   has_many :states
 
   def self.map_all
-    if block_given?
-      self.all.map{|item| yield(item)}
-    else
-      raise ArgumentError, 'Block is not given'
-    end
+    found = self.find_each
+    block_given? ? found.map{|item| yield(item)} : found
   end
 end

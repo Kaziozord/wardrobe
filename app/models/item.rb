@@ -5,11 +5,8 @@ class Item < ActiveRecord::Base
   has_and_belongs_to_many :item_sets
 
   def self.map_all
-    if block_given?
-      self.all.map{|item| yield(item)}
-    else
-      raise ArgumentError, 'Block is not given'
-    end
+    found = self.find_each
+    block_given? ? found.map{|item| yield(item)} : found
   end
 
   def get_value(property)
