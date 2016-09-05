@@ -19,7 +19,7 @@
             %button.btn.btn-xs
               laundry
           .col-sm-6
-            .small   
+            .small
               - item[:properties].each do |key, value|
                 %li
                   = "#{key.to_s.humanize.downcase}: #{value}"
